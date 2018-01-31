@@ -1,5 +1,7 @@
 package mqtt.utilities.logger;
 
+import mqtt.utilities.StringUtilities;
+
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -90,7 +92,7 @@ class FileLogger implements BaseLogger {
 
     private boolean writeLog(Optional<PrintWriter> file, String msg) {
         if(file.isPresent()) {
-            file.get().println(addTimeStamp(msg));
+            file.get().println(StringUtilities.addTimeStamp(msg));
             return file.get().checkError(); // make sure that this clears the flag
         }
 
@@ -112,10 +114,6 @@ class FileLogger implements BaseLogger {
         }
 
         return Optional.ofNullable(writer);
-    }
-
-    private String addTimeStamp(String msg) {
-        return msg + " -- " + new Date().toString();
     }
 
     static class FileLoggerBuilder {

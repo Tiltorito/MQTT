@@ -9,5 +9,7 @@ import java.util.concurrent.ArrayBlockingQueue;
 public class Solution {
     public static void main(String[] args) {
         Logger logger = new Logger(Solution.class);
+
+        logger.w("Warning");
     }
 }
