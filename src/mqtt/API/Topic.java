@@ -14,7 +14,7 @@ import java.util.ArrayDeque;
  */
 
 public class Topic {
-    private static Logger logger = new Logger(Topic.class); // logger for the class
+    private static Logger logger = new Logger(Topic.class);
 
     private String hostname; // host name
     private String topic; // topic name
