@@ -25,7 +25,7 @@ public class Topic {
 
     private DataOutputStream shellProcessOutputStream;
 
-    private ArrayDeque<String> incomingMessages = new ArrayDeque<>();
+    private final ArrayDeque<String> incomingMessages = new ArrayDeque<>();
 
     private Thread listener;
 
@@ -124,7 +124,13 @@ public class Topic {
      * @return a copy of the incoming messages
      */
     public ArrayDeque<String> getIncomingMessages() {
-        return incomingMessages.clone();
+        ArrayDeque<String> messages = null;
+
+        synchronized (incomingMessages) {
+            messages = incomingMessages.clone();
+        }
+
+        return messages;
     }
 
     /**
@@ -150,7 +156,7 @@ public class Topic {
     private static class ListenForIncomingMessages extends Thread {
         private static Logger logger = new Logger(ListenForIncomingMessages.class);
 
-        private ArrayDeque<String> queue; // the queue that the responses will be added
+        private final ArrayDeque<String> queue; // the queue that the responses will be added
 
         private BufferedReader stream; // the stream to read from
 
@@ -167,7 +173,11 @@ public class Topic {
             while(!isInterrupted()) {
                 try {
                     String response = stream.readLine();
-                    queue.offer(response);
+
+                    synchronized (queue) {
+                        queue.offer(response);
+                    }
+
                     logger.d("Read: " + response + " - from " + topicName);
                 }
                 catch(IOException e) {
