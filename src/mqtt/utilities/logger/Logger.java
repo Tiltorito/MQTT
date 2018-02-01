@@ -9,6 +9,12 @@ import java.util.function.Consumer;
 public class Logger implements BaseLogger {
     private final String tag;
 
+
+    private static final String ERROR_TAG = "[ERROR]";
+    private static final String INFO_TAG = "[INFO]";
+    private static final String DEBUG_TAG = "[DEBUG]";
+    private static final String WARNING_TAG = "[WARNING]";
+
     private static BaseLogger logger = new FileLogger.FileLoggerBuilder()
             .setInfoFile("infoLogs.txt")
             .setDebugFile("debugLogs.txt")
@@ -31,7 +37,10 @@ public class Logger implements BaseLogger {
      */
     @Override
     public boolean e(String msg) {
-        return logger.e(addTag(msg));
+        String str = addTag(msg);
+        System.out.println(ERROR_TAG + str);
+
+        return logger.e(str);
     }
 
     /**
@@ -41,7 +50,10 @@ public class Logger implements BaseLogger {
      */
     @Override
     public boolean d(String msg) {
-        return logger.d(addTag(msg));
+        String str = addTag(msg);
+        System.out.println(DEBUG_TAG + str);
+
+        return logger.d(str);
     }
 
     /**
@@ -51,7 +63,10 @@ public class Logger implements BaseLogger {
      */
     @Override
     public boolean i(String msg) {
-        return logger.i(addTag(msg));
+        String str = addTag(msg);
+        System.out.println(INFO_TAG + str);
+
+        return logger.i(str);
     }
 
     /**
@@ -61,7 +76,10 @@ public class Logger implements BaseLogger {
      */
     @Override
     public boolean w(String msg) {
-        return logger.w(addTag(msg));
+        String str = addTag(msg);
+        System.out.println(WARNING_TAG + str);
+
+        return logger.w(str);
     }
 
     /**

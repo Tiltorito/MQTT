@@ -44,7 +44,7 @@ public class CommandBuilder {
         builder.append(" -t ").append(topic);
 
         if(!StringUtilities.isEmpty(message)) {
-            builder.append(" -m ").append(message);
+            builder.append(" -m ").append(StringUtilities.addChar(message, '"'));
         }
 
         return builder.toString();

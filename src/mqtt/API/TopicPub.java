@@ -6,6 +6,7 @@ import mqtt.utilities.logger.BlockFailedException;
 import mqtt.utilities.logger.Logger;
 
 import java.io.DataOutputStream;
+import java.io.PrintWriter;
 
 /**
  * Created by harry on 01/02/2018.
@@ -15,7 +16,7 @@ public class TopicPub extends Topic {
     private static Logger logger = new Logger(TopicPub.class);
 
     private Process shellProcess; // a shell process, will be used to send messages.
-    private DataOutputStream shellProcessOutputStream;
+    private PrintWriter shellProcessOutputStream;
 
 
     public TopicPub(String hostname, String topic) {
@@ -25,7 +26,7 @@ public class TopicPub extends Topic {
         shellProcess = logger.withDebugLogs("shell for " + topicMsg,
                 () -> new ProcessBuilder("/bin/bash").start());
 
-        shellProcessOutputStream = new DataOutputStream(shellProcess.getOutputStream());
+        shellProcessOutputStream = new PrintWriter(shellProcess.getOutputStream(), true);
     }
 
     /**
@@ -36,7 +37,7 @@ public class TopicPub extends Topic {
     public boolean send(String msg) {
         try {
             return logger.withInfoLogs("Sending message: " + msg + " -- on " + topicMsg, () -> {
-                shellProcessOutputStream.writeUTF(new CommandBuilder()
+                shellProcessOutputStream.println(new CommandBuilder()
                         .setHostname(hostname)
                         .setTopic(topic)
                         .setMessage(msg)

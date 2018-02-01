@@ -36,6 +36,11 @@ public class StringUtilities {
         return "[" + str + "]";
     }
 
+
+    public static String addChar(String str, char ch) {
+        return String.valueOf(ch) + str + ch;
+    }
+
     /**
      * Adds a timeStamp in the end of a string.
      * @param msg the String that the timestamp will be added

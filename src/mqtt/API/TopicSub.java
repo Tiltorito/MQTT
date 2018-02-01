@@ -24,7 +24,7 @@ public class TopicSub extends Topic {
     public TopicSub(String hostname, String topic) {
         super(hostname, topic);
 
-        String[] args = {"/bin/bash", "-c", new CommandBuilder()
+        String[] args = {"/bin/bash", "-c",  new CommandBuilder()
                 .setHostname(hostname)
                 .setTopic(topic).build()
         };
@@ -133,11 +133,13 @@ public class TopicSub extends Topic {
                 try {
                     String response = stream.readLine();
 
-                    synchronized (queue) {
-                        queue.offer(response);
+                    if(response != null) {
+                        synchronized (queue) {
+                            queue.offer(response);
+                        }
                     }
 
-                    logger.d("Read: " + response + " - from " + topicName);
+                    logger.i("Read: " + response + " - from " + topicName);
                 }
                 catch(IOException e) {
                     e.printStackTrace();
