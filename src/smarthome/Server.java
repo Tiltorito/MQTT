@@ -1,6 +1,7 @@
 package smarthome;
 
 import mqtt.API.Topic;
+import mqtt.API.TopicPub;
 import mqtt.API.TopicSub;
 import mqtt.utilities.logger.BlockFailedException;
 import mqtt.utilities.logger.Logger;
@@ -15,7 +16,7 @@ public class Server {
     private Logger logger = new Logger(Server.class);
 
     private HashMap<String, TopicSub> subTopics = new HashMap<>();
-    private HashMap<String, TopicSub> pubTopics = new HashMap<>();
+    private HashMap<String, TopicPub> pubTopics = new HashMap<>();
 
     private String localhost;
 
@@ -45,6 +46,22 @@ public class Server {
     }
 
     public boolean addPubTopic(String topic) {
-        return false;
+        try {
+            logger.withInfoLogs("adding " + topic + " in the list of pub topics"
+                    , "this topic is already in the list of pub topics"
+                    , () -> {
+                        if (pubTopics.containsKey(topic)) {
+                            throw new RuntimeException();
+                        }
+
+                        TopicPub pub = new TopicPub(localhost, topic);
+                        pubTopics.put(topic, pub);
+                    });
+        }
+        catch(BlockFailedException e) {
+            return false;
+        }
+
+        return true;
     }
 }

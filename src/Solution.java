@@ -15,11 +15,11 @@ public class Solution {
         Logger logger = new Logger(Solution.class);
 
         Server server = new Server("localhost");
-        server.addSubTopic("station/topic");
+        server.addPubTopic("station/topic");
 
         System.out.println();
         System.out.println();
 
-        server.addSubTopic("station/topic");
+        server.addPubTopic("station/topic");
     }
 }
