@@ -187,7 +187,7 @@ public class Logger implements BaseLogger {
 
         try {
             res = block.run();
-            method.accept("Completed " + failMessage);
+            method.accept("Completed " + message);
         }
         catch(Exception e) {
             e("Failed " + failMessage);
