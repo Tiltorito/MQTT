@@ -1,8 +1,6 @@
 package mqtt.API;
 
-import mqtt.utilities.StringUtilities;
 import mqtt.utilities.command.CommandBuilder;
-import mqtt.utilities.logger.BlockFailedException;
 import mqtt.utilities.logger.Logger;
 
 import java.io.*;
