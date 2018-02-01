@@ -15,6 +15,8 @@ public class Logger implements BaseLogger {
     private static final String DEBUG_TAG = "[DEBUG]";
     private static final String WARNING_TAG = "[WARNING]";
 
+    private static final boolean DISPLAY_DEBUG = false;
+
     private static BaseLogger logger = new FileLogger.FileLoggerBuilder()
             .setInfoFile("infoLogs.txt")
             .setDebugFile("debugLogs.txt")
@@ -51,7 +53,10 @@ public class Logger implements BaseLogger {
     @Override
     public boolean d(String msg) {
         String str = addTag(msg);
-        System.out.println(DEBUG_TAG + str);
+
+        if(DISPLAY_DEBUG) {
+            System.out.println(DEBUG_TAG + str);
+        }
 
         return logger.d(str);
     }

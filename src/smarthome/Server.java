@@ -6,6 +6,8 @@ import mqtt.API.TopicSub;
 import mqtt.utilities.logger.BlockFailedException;
 import mqtt.utilities.logger.Logger;
 
+import java.util.ArrayDeque;
+import java.util.Deque;
 import java.util.HashMap;
 
 /**
@@ -68,7 +70,7 @@ public class Server {
     public boolean send(String topic, String message) {
         try {
             logger.withInfoLogs("sending " + message + " at topic " + topic
-                    , "this topic is not registered on the server"
+                    , topic + " is not registered on the server"
                     , () -> pubTopics.get(topic).send(message));
         }
         catch(BlockFailedException e) {
@@ -76,5 +78,27 @@ public class Server {
         }
 
         return true;
+    }
+
+    public ArrayDeque<String> getMessagesFromTopic(String topic) {
+        try {
+            return logger.withInfoLogs("collecting incoming messages from " + topic
+                    , topic + " couldn't be found"
+                    , () -> subTopics.get(topic).getIncomingMessages());
+        }
+        catch(BlockFailedException e) {
+            return new ArrayDeque<>();
+        }
+
+    }
+
+    public void close() {
+        for(Topic topic : subTopics.values()) {
+            logger.withInfoLogs("Clossing sub " + topic, "failed to close sub " + topic, () -> topic.close());
+        }
+
+        for(Topic topic : subTopics.values()) {
+            logger.withInfoLogs("Clossing pub " + topic, "failed to close pub " + topic, () -> topic.close());
+        }
     }
 }

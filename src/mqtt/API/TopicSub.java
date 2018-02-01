@@ -121,7 +121,7 @@ public class TopicSub extends Topic {
 
                     if(response != null) {
                         synchronized (queue) {
-                            queue.offer(response);
+                            queue.push(response);
                         }
                     }
 

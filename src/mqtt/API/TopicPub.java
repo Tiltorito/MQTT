@@ -36,7 +36,7 @@ public class TopicPub extends Topic {
      */
     public boolean send(String msg) {
         try {
-            return logger.withInfoLogs("Sending message: " + msg + " -- on " + topicMsg, () -> {
+            return logger.withDebugLogs("Sending message: " + msg + " -- on " + topicMsg, () -> {
                 shellProcessOutputStream.println(new CommandBuilder()
                         .setHostname(hostname)
                         .setTopic(topic)

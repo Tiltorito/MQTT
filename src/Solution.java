@@ -4,6 +4,8 @@ import mqtt.API.TopicSub;
 import mqtt.utilities.logger.Logger;
 import smarthome.Server;
 
+import java.util.ArrayDeque;
+import java.util.Deque;
 import java.util.concurrent.ArrayBlockingQueue;
 
 /**
@@ -20,5 +22,16 @@ public class Solution {
         server.addSubTopic("station/topic");
 
         server.send("station/topic", "hello there folks");
+        server.send("station/topic", "hello there folks1");
+
+        Thread.sleep(1000);
+
+        ArrayDeque<String> queue = server.getMessagesFromTopic("station/topic");
+
+
+        System.out.println(queue.pop());
+
+        server.close();
+
     }
 }
