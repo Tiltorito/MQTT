@@ -87,31 +87,27 @@ public class Logger implements BaseLogger {
      * Starting loading files
      * Completed loading files OR
      * Failed loading files if an exception is be thrown in the block which passed as argument.
-     * The logs are error logs.
+     * The logs are info logs.
      * @param description the description message that will be used for the logs
      * @param block the block to be executed
      * @param <T> the return type of the block
      * @return the return value of the block
      * @throws BlockFailedException if the block throws an exception
      */
-    public <T> T withErrorLogs(String description, BlockWithReturn<T> block) throws BlockFailedException {
-        return withLogging(this::e, description, block);
+    public <T> T withDebugLogs(String message, BlockWithReturn<T> block) throws BlockFailedException {
+        return withDebugLogs(message, message, block);
     }
 
-    /**
-     * Executes a block of code while writing comments anywhere around it, ie,
-     * Starting loading files
-     * Completed loading files OR
-     * Failed loading files if an exception is be thrown in the block which passed as argument.
-     * The logs are debug logs.
-     * @param description the description message that will be used for the logs
-     * @param block the block to be executed
-     * @param <T> the return type of the block
-     * @return the return value of the block
-     * @throws BlockFailedException if the block throws an exception
-     */
-    public <T> T withDebugLogs(String description, BlockWithReturn<T> block) throws BlockFailedException {
-        return withLogging(this::d, description, block);
+    public <T> T withDebugLogs(String message, String failMessage, BlockWithReturn<T> block) throws BlockFailedException {
+        return withLogging(this::d, message, failMessage, block);
+    }
+
+    public void withDebugLogs(String message, Block block) throws BlockFailedException {
+        withDebugLogs(message, message, block);
+    }
+
+    public void withDebugLogs(String message, String failMessage, Block block) throws BlockFailedException {
+        withLogging(this::d, message, failMessage, block);
     }
 
     /**
@@ -126,8 +122,20 @@ public class Logger implements BaseLogger {
      * @return the return value of the block
      * @throws BlockFailedException if the block throws an exception
      */
-    public <T> T withInfoLogs(String description, BlockWithReturn<T> block) throws BlockFailedException {
-        return withLogging(this::i, description, block);
+    public <T> T withInfoLogs(String message, BlockWithReturn<T> block) throws BlockFailedException {
+        return withInfoLogs(message, message, block);
+    }
+
+    public <T> T withInfoLogs(String message, String failMessage, BlockWithReturn<T> block) throws BlockFailedException {
+        return withLogging(this::i, message, failMessage, block);
+    }
+
+    public void withInfoLogs(String message, Block block) throws BlockFailedException {
+        withInfoLogs(message, message, block);
+    }
+
+    public void withInfoLogs(String message, String failMessage, Block block) throws BlockFailedException {
+        withLogging(this::i, message, failMessage, block);
     }
 
     /**
@@ -142,22 +150,47 @@ public class Logger implements BaseLogger {
      * @return the return value of the block
      * @throws BlockFailedException if the block throws an exception
      */
-    public <T> T withWarningLogs(String description, BlockWithReturn<T> block) throws BlockFailedException {
-        return withLogging(this::w, description, block);
+    public <T> T withWarningLogs(String message, BlockWithReturn<T> block) throws BlockFailedException {
+        return withWarningLogs(message, message, block);
+    }
+
+    public <T> T withWarningLogs(String message, String failMessage, BlockWithReturn<T> block) throws BlockFailedException {
+        return withLogging(this::w, message, failMessage, block);
+    }
+
+    public void withWarningLogs(String message, Block block) throws BlockFailedException {
+        withWarningLogs(message, message, block);
+    }
+
+    public void withWarningLogs(String message, String failMessage, Block block) throws BlockFailedException {
+        withLogging(this::w, message, failMessage, block);
+    }
+
+    private void withLogging(Consumer<String> method, String message, String failMessage, Block block) throws BlockFailedException {
+        method.accept("Starting " + message);
+
+        try {
+            block.run();
+            method.accept("Completed " + message);
+        }
+        catch (Exception e) {
+            e("Failed " + failMessage);
+            throw new BlockFailedException(e.getMessage());
+        }
     }
 
 
-    private <T> T withLogging(Consumer<String> method, String description, BlockWithReturn<T> block) throws BlockFailedException {
-        method.accept("Starting " + description);
+    private <T> T withLogging(Consumer<String> method, String message, String failMessage, BlockWithReturn<T> block) throws BlockFailedException {
+        method.accept("Starting " + message);
 
         T res = null;
 
         try {
             res = block.run();
-            method.accept("Completed " + description);
+            method.accept("Completed " + failMessage);
         }
         catch(Exception e) {
-            method.accept("Failed " + description);
+            e("Failed " + failMessage);
             throw new BlockFailedException(e.getMessage());
         }
 
