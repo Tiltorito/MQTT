@@ -64,4 +64,17 @@ public class Server {
 
         return true;
     }
+
+    public boolean send(String topic, String message) {
+        try {
+            logger.withInfoLogs("sending " + message + " at topic " + topic
+                    , "this topic is not registered on the server"
+                    , () -> pubTopics.get(topic).send(message));
+        }
+        catch(BlockFailedException e) {
+            return false;
+        }
+
+        return true;
+    }
 }
