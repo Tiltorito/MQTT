@@ -33,7 +33,6 @@ public class TopicSub extends Topic {
                 () -> new ProcessBuilder(args).start());
     }
 
-
     /**
      * Starts the listening thread.
      * @return true if the listening thread started successfully, false if there was a problem or it was already running
@@ -77,7 +76,13 @@ public class TopicSub extends Topic {
      * @return true if there is incoming messages in the queue, false otherwise
      */
     public boolean hasIncomingMessages() {
-        return !incomingMessages.isEmpty();
+        boolean hasMessages = false;
+
+        synchronized (incomingMessages) {
+             hasMessages = !incomingMessages.isEmpty();
+        }
+
+        return hasMessages;
     }
 
     /**
