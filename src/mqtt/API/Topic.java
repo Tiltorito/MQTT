@@ -33,4 +33,6 @@ public abstract class Topic {
     public String getTopic() {
         return topic;
     }
+
+    public abstract boolean close();
 }

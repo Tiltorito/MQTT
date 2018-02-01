@@ -1,6 +1,8 @@
 package mqtt.API;
 
+import mqtt.utilities.Utilities;
 import mqtt.utilities.command.CommandBuilder;
+import mqtt.utilities.logger.BlockFailedException;
 import mqtt.utilities.logger.Logger;
 
 import java.io.*;
@@ -97,6 +99,15 @@ public class TopicSub extends Topic {
         return messages;
     }
 
+    @Override
+    public boolean close() {
+        if(listener != null) {
+            listener.interrupt();
+            listener = null;
+        }
+
+        return Utilities.killProcess(processSub, logger, "Killing sub process");
+    }
 
     /**
      * A thread which checks if it has any messages from the sub and put these messages in the queue

@@ -1,5 +1,6 @@
 package mqtt.API;
 
+import mqtt.utilities.Utilities;
 import mqtt.utilities.command.CommandBuilder;
 import mqtt.utilities.logger.BlockFailedException;
 import mqtt.utilities.logger.Logger;
@@ -47,5 +48,10 @@ public class TopicPub extends Topic {
             e.printStackTrace();
             return false;
         }
+    }
+
+    @Override
+    public boolean close() {
+        return Utilities.killProcess(shellProcess, logger,"killing shell process");
     }
 }
