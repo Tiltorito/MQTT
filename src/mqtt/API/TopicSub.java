@@ -48,20 +48,6 @@ public class TopicSub extends Topic {
         return false;
     }
 
-    /**
-     * Stops the current listening thread.
-     * @return true if indeed this method call stopped the thread, false if it was already stopped
-     */
-    public boolean stopListening() {
-        if(listener != null) {
-            listener.interrupt();
-            listener = null;
-
-            return true;
-        }
-
-        return false; // it is already stopped
-    }
 
     /**
      * Retrus true if the listening thread is running, false otherwise.
